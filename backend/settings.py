@@ -19,7 +19,7 @@ DEBUG = False  # Set False for production
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
-    "your-backend-name.onrender.com",  # replace with your Render URL
+    "glamourheaven-backend.onrender.com",
 ]
 
 # Application definition
