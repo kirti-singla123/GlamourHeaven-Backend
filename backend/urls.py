@@ -25,7 +25,11 @@ from bookings.views import BookingViewSet
 router = DefaultRouter()
 router.register(r'bookings', BookingViewSet, basename='booking')
 
+# simple home view
+def home(request):
+    return JsonResponse({"message": "Welcome to Glamour Heaven Backend API!"})
 urlpatterns = [
+    path('', home),  # maps root URL
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
 ]
