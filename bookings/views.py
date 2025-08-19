@@ -35,12 +35,17 @@ class BookingViewSet(viewsets.ModelViewSet):
             f"✅ Hi {booking.name}, your booking is confirmed!\n"
             f"Service: {booking.service}\n"
             f"Date: {booking.date}\n"
-            f"Time: {booking.time}\n"
-            f"Price: {booking.price}"
+            f"Time: {booking.time}"
         )
 
-        sid = self.send_whatsapp_message(booking.phone, message_body)
-        return Response({'message': 'Booking accepted', 'sid': sid, 'status': booking.status}, status=status.HTTP_200_OK)
+        try:
+            sid = self.send_whatsapp_message(booking.phone, message_body)
+        except Exception as e:
+            print("Twilio error:", e)
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        return Response({'message': 'Booking accepted', 'sid': sid, 'status': booking.status},
+                        status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'])
     def reject(self, request, pk=None):
