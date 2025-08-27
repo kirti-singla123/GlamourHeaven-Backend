@@ -1,5 +1,5 @@
 from rest_framework import viewsets, status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import Booking
@@ -10,7 +10,14 @@ import os
 class BookingViewSet(viewsets.ModelViewSet):
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]  # default
+
+    def get_permissions(self):
+        # Allow public users to create bookings
+        if self.action == 'create':
+            return [AllowAny()]
+        # All other actions (list, update, delete, accept, reject) require login
+        return [IsAuthenticated()]
 
     def send_whatsapp_message(self, to_number, message_body):
         account_sid = os.environ['TWILIO_ACCOUNT_SID']
@@ -60,4 +67,5 @@ class BookingViewSet(viewsets.ModelViewSet):
         )
 
         sid = self.send_whatsapp_message(booking.phone, message_body)
-        return Response({'message': 'Booking rejected', 'sid': sid, 'status': booking.status}, status=status.HTTP_200_OK)
+        return Response({'message': 'Booking rejected', 'sid': sid, 'status': booking.status},
+                        status=status.HTTP_200_OK)
