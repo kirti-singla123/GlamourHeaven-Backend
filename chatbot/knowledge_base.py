@@ -4,43 +4,51 @@ SALON_NAME = "GlamourHaven"
 
 SERVICES = {
     "Facial Treatments": [
-        {"name": "Classic Facial", "price": "₹800 - ₹1,200"},
-        {"name": "Fruit Facial", "price": "₹700 - ₹1,000"},
-        {"name": "Gold Facial", "price": "₹1,500 - ₹2,500"},
-        {"name": "Anti-Ageing Facial", "price": "₹2,000 - ₹3,500"},
-        {"name": "Hydrafacial", "price": "₹3,000 - ₹5,000"},
+        {"name": "Classic Facial", "price": "₹1,500", "duration": "45 mins"},
+        {"name": "Anti-Aging Facial", "price": "₹3,500", "duration": "75 mins"},
+        {"name": "Gold Facial", "price": "₹5,000", "duration": "90 mins"},
+        {"name": "Fruit Facial", "price": "₹1,200", "duration": "45 mins"},
+        {"name": "Hydrafacial", "price": "₹4,500", "duration": "60 mins"},
+        {"name": "Brightening Facial", "price": "₹2,000", "duration": "50 mins"},
     ],
     "Hair Services": [
-        {"name": "Haircut & Styling", "price": "₹300 - ₹800"},
-        {"name": "Hair Spa", "price": "₹800 - ₹1,500"},
-        {"name": "Hair Coloring / Highlights", "price": "₹1,500 - ₹4,000"},
-        {"name": "Keratin Treatment", "price": "₹3,000 - ₹6,000"},
-        {"name": "Hair Straightening / Smoothening", "price": "₹2,500 - ₹6,000"},
+        {"name": "Hair Cut & Style", "price": "₹800", "duration": "60 mins"},
+        {"name": "Hair Treatment", "price": "₹1,800", "duration": "90 mins"},
+        {"name": "Hair Spa", "price": "₹1,500", "duration": "60 mins"},
+        {"name": "Keratin Treatment", "price": "₹5,000", "duration": "120 mins"},
+        {"name": "Hair Coloring", "price": "₹3,000", "duration": "90 mins"},
+        {"name": "Highlights", "price": "₹4,000", "duration": "120 mins"},
+        {"name": "Hair Straightening", "price": "₹4,500", "duration": "150 mins"},
     ],
     "Nail Services": [
-        {"name": "Manicure", "price": "₹400 - ₹700"},
-        {"name": "Pedicure", "price": "₹500 - ₹900"},
-        {"name": "Gel Nail Extension", "price": "₹1,200 - ₹2,000"},
-        {"name": "Nail Art (add-on)", "price": "₹200 - ₹800"},
+        {"name": "Basic Manicure", "price": "₹600", "duration": "45 mins"},
+        {"name": "Gel Manicure", "price": "₹1,200", "duration": "60 mins"},
+        {"name": "Pedicure Deluxe", "price": "₹1,000", "duration": "75 mins"},
+        {"name": "Luxury Gel Manicure", "price": "₹1,200", "duration": "45 mins"},
+        {"name": "Gel Pedicure", "price": "₹1,500", "duration": "60 mins"},
+        {"name": "Nail Art", "price": "₹800", "duration": "30 mins"},
+        {"name": "Nail Extensions", "price": "₹2,000", "duration": "90 mins"},
     ],
-    "Makeup": [
-        {"name": "Party Makeup", "price": "₹1,500 - ₹3,000"},
-        {"name": "Engagement Makeup", "price": "₹4,000 - ₹8,000"},
-        {"name": "HD / Airbrush Makeup", "price": "₹5,000 - ₹12,000"},
-        {"name": "Bridal Makeup", "price": "₹8,000 - ₹25,000"},
+    "Makeup Services": [
+        {"name": "Party Makeup", "price": "₹2,500", "duration": "90 mins"},
+        {"name": "Bridal Makeup", "price": "₹8,000", "duration": "3 hours"},
+        {"name": "Engagement Makeup", "price": "₹4,500", "duration": "2 hours"},
+        {"name": "Premium Party Makeup", "price": "₹3,000", "duration": "60 mins"},
+        {"name": "Elite Engagement Makeup", "price": "₹6,000", "duration": "90 mins"},
+        {"name": "Premium Bridal Makeup", "price": "₹15,000", "duration": "180 mins"},
     ],
     "Threading & Waxing": [
-        {"name": "Eyebrow Threading", "price": "₹50 - ₹100"},
-        {"name": "Upper Lip Threading", "price": "₹30 - ₹50"},
-        {"name": "Full Face Waxing", "price": "₹300 - ₹500"},
-        {"name": "Full Arms & Legs Waxing", "price": "₹600 - ₹1,200"},
-        {"name": "Full Body Waxing", "price": "₹1,500 - ₹2,500"},
+        {"name": "Eyebrow Threading", "price": "₹200", "duration": "20 mins"},
+        {"name": "Full Face Threading", "price": "₹500", "duration": "45 mins"},
+        {"name": "Upper Lip Threading", "price": "₹150", "duration": "15 mins"},
+        {"name": "Full Face Waxing", "price": "₹400", "duration": "30 mins"},
+        {"name": "Full Arms Waxing", "price": "₹600", "duration": "45 mins"},
     ],
     "Spa Treatments": [
-        {"name": "Head & Shoulder Massage", "price": "₹500 - ₹900"},
-        {"name": "Body Massage (60 min)", "price": "₹1,500 - ₹2,500"},
-        {"name": "Aromatherapy", "price": "₹2,000 - ₹3,000"},
-        {"name": "Body Polishing", "price": "₹2,500 - ₹4,000"},
+        {"name": "Body Massage", "price": "₹2,000", "duration": "60 mins"},
+        {"name": "Hot Stone Massage", "price": "₹3,500", "duration": "90 mins"},
+        {"name": "Body Scrub", "price": "₹1,800", "duration": "45 mins"},
+        {"name": "Deep Tissue Body Massage", "price": "₹2,500", "duration": "60 mins"},
     ],
 }
 
@@ -50,7 +58,7 @@ def _build_services_text():
     for category, items in SERVICES.items():
         lines.append(f"\n{category}:")
         for item in items:
-            lines.append(f"  - {item['name']}: {item['price']}")
+            lines.append(f"  - {item['name']}: {item['price']} ({item['duration']})")
     return "\n".join(lines)
 
 
@@ -58,17 +66,17 @@ SYSTEM_PROMPT = f"""You are the friendly virtual assistant for {SALON_NAME}, a b
 
 You help customers with:
 - Information about salon services
-- Pricing questions (all prices are in Indian Rupees, INR)
+- Pricing and duration questions (all prices are in Indian Rupees, INR)
 - Booking guidance
 
-Here is the full list of services and indicative pricing offered by {SALON_NAME}:
+Here is the full list of services, prices, and durations offered by {SALON_NAME}:
 {_build_services_text()}
 
 Guidelines:
-- Prices are approximate starting ranges and can vary based on hair/skin condition, products used, and stylist. Mention this when quoting a price.
+- These are the exact prices and durations listed on the {SALON_NAME} website. Quote them as-is.
 - Be warm, concise, and professional.
 - If a customer wants to book, ask for their preferred service, date, and time, and tell them to submit these details through the GlamourHaven booking form so staff can confirm availability.
-- Never invent services, prices, or promotions that are not listed above.
+- Never invent services, prices, durations, or promotions that are not listed above.
 - If a question is unrelated to {SALON_NAME}'s services, politely steer the conversation back to how you can help with salon-related questions.
 - Keep answers short unless the customer asks for more detail.
 """
