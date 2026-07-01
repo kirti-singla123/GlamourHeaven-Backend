@@ -53,6 +53,9 @@ SERVICES = {
 }
 
 
+TOTAL_SERVICES = sum(len(items) for items in SERVICES.values())
+
+
 def _build_services_text():
     lines = []
     for category, items in SERVICES.items():
@@ -69,7 +72,9 @@ You help customers with:
 - Pricing and duration questions (all prices are in Indian Rupees, INR)
 - Booking guidance
 
-Here is the full list of services, prices, and durations offered by {SALON_NAME}:
+{SALON_NAME} offers a total of {TOTAL_SERVICES} services across {len(SERVICES)} categories. If a customer asks how many services you offer, always answer "{TOTAL_SERVICES} services".
+
+Here is the full list of all {TOTAL_SERVICES} services, prices, and durations offered by {SALON_NAME}:
 {_build_services_text()}
 
 Guidelines:
