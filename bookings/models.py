@@ -1,5 +1,19 @@
 from django.db import models
 
+
+def format_phone_number(phone):
+    # Normalize to E.164 for Canada/US (+1)
+    cleaned = phone.replace(' ', '').replace('-', '')
+
+    if cleaned.startswith('+'):
+        return cleaned
+    if cleaned.startswith('1'):
+        return f'+{cleaned}'
+    if len(cleaned) == 10 and cleaned.isdigit():
+        return f'+1{cleaned}'
+    return cleaned
+
+
 class Booking(models.Model):
     STATUS_CHOICES = [
         ('pending', 'Pending'),
@@ -16,10 +30,7 @@ class Booking(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
-        # Automatically prepend +91 if missing (for India)
-        if not self.phone.startswith('+'):
-            digits_only = ''.join(filter(str.isdigit, self.phone))
-            self.phone = f'+91{digits_only}'
+        self.phone = format_phone_number(self.phone)
         super().save(*args, **kwargs)
 
     def __str__(self):

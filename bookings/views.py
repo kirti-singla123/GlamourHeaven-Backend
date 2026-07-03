@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models import Booking
+from .models import Booking, format_phone_number
 from .serializers import BookingSerializer
 from twilio.rest import Client
 import os
@@ -35,6 +35,7 @@ class BookingViewSet(viewsets.ModelViewSet):
             )
 
         from_number = 'whatsapp:' + phone_number
+        to_number = format_phone_number(to_number)
         client = Client(account_sid, auth_token)
 
         message = client.messages.create(
