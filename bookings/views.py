@@ -20,9 +20,21 @@ class BookingViewSet(viewsets.ModelViewSet):
         return [IsAuthenticated()]
 
     def send_whatsapp_message(self, to_number, message_body):
-        account_sid = os.environ['TWILIO_ACCOUNT_SID']
-        auth_token = os.environ['TWILIO_AUTH_TOKEN']
-        from_number = 'whatsapp:' + os.environ['TWILIO_PHONE_NUMBER']
+        account_sid = os.environ.get('TWILIO_ACCOUNT_SID')
+        auth_token = os.environ.get('TWILIO_AUTH_TOKEN')
+        phone_number = os.environ.get('TWILIO_PHONE_NUMBER')
+
+        missing = [name for name, value in (
+            ('TWILIO_ACCOUNT_SID', account_sid),
+            ('TWILIO_AUTH_TOKEN', auth_token),
+            ('TWILIO_PHONE_NUMBER', phone_number),
+        ) if not value]
+        if missing:
+            raise RuntimeError(
+                f"Missing Twilio environment variable(s): {', '.join(missing)}"
+            )
+
+        from_number = 'whatsapp:' + phone_number
         client = Client(account_sid, auth_token)
 
         message = client.messages.create(
@@ -66,6 +78,11 @@ class BookingViewSet(viewsets.ModelViewSet):
             f"Please select another date or time."
         )
 
-        sid = self.send_whatsapp_message(booking.phone, message_body)
+        try:
+            sid = self.send_whatsapp_message(booking.phone, message_body)
+        except Exception as e:
+            print("Twilio error:", e)
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
         return Response({'message': 'Booking rejected', 'sid': sid, 'status': booking.status},
                         status=status.HTTP_200_OK)
