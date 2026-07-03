@@ -19,6 +19,36 @@ class BookingViewSet(viewsets.ModelViewSet):
         # All other actions (list, update, delete, accept, reject) require login
         return [IsAuthenticated()]
 
+    def build_message_body(self, booking):
+        if booking.status == 'accepted':
+            return (
+                f"✅ Hi {booking.name}, your booking is confirmed!\n"
+                f"Service: {booking.service}\n"
+                f"Date: {booking.date}\n"
+                f"Time: {booking.time}"
+            )
+        return (
+            f"❌ Hi {booking.name}, sorry this slot is full.\n"
+            f"Service: {booking.service}\n"
+            f"Please select another date or time."
+        )
+
+    def perform_update(self, serializer):
+        previous_status = serializer.instance.status
+        booking = serializer.save()
+        status_changed_to_final = (
+            previous_status != booking.status and booking.status in ('accepted', 'rejected')
+        )
+        if status_changed_to_final:
+            print(
+                f"[Booking] status changed to {booking.status!r} via generic update "
+                f"for booking id={booking.id} phone={booking.phone!r}"
+            )
+            try:
+                self.send_whatsapp_message(booking.phone, self.build_message_body(booking))
+            except Exception as e:
+                print(f"[WhatsApp] FAILED - {type(e).__name__}: {e}")
+
     def send_whatsapp_message(self, to_number, message_body):
         account_sid = os.environ.get('TWILIO_ACCOUNT_SID')
         auth_token = os.environ.get('TWILIO_AUTH_TOKEN')
@@ -66,12 +96,7 @@ class BookingViewSet(viewsets.ModelViewSet):
         booking.status = 'accepted'
         booking.save()
 
-        message_body = (
-            f"✅ Hi {booking.name}, your booking is confirmed!\n"
-            f"Service: {booking.service}\n"
-            f"Date: {booking.date}\n"
-            f"Time: {booking.time}"
-        )
+        message_body = self.build_message_body(booking)
 
         try:
             sid = self.send_whatsapp_message(booking.phone, message_body)
@@ -89,11 +114,7 @@ class BookingViewSet(viewsets.ModelViewSet):
         booking.status = 'rejected'
         booking.save()
 
-        message_body = (
-            f"❌ Hi {booking.name}, sorry this slot is full.\n"
-            f"Service: {booking.service}\n"
-            f"Please select another date or time."
-        )
+        message_body = self.build_message_body(booking)
 
         try:
             sid = self.send_whatsapp_message(booking.phone, message_body)
